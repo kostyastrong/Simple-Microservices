@@ -10,6 +10,6 @@ public class RabbitMqSender {
     private RabbitTemplate rabbitTemplate;
 
     public void send(User user) {
-        rabbitTemplate.convertAndSend(com.example.heavy_service.BrokerConfiguration.QUEUE_NAME_RAW, user.toString());
+        rabbitTemplate.convertAndSend("to_analyze", user.toString());
     }
 }
