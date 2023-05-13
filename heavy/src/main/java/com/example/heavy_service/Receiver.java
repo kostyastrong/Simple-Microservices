@@ -2,6 +2,8 @@ package com.example.heavy_service;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -17,16 +19,18 @@ import static com.example.heavy_service.BrokerConfiguration.QUEUE_NAME_READY;
 
 @Service
 @Slf4j
+@NoArgsConstructor
+@AllArgsConstructor
 public class Receiver {
-    private final Counter requests;
-    private final Counter errors;
+//    private final Counter requests;
+//    private final Counter errors;
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public Receiver(MeterRegistry meterRegistry) {
-        requests = meterRegistry.counter("demo_requests_total");
-        errors = meterRegistry.counter("demo_errors");
-    }
+//    public Receiver(MeterRegistry meterRegistry) {
+//        requests = meterRegistry.counter("demo_requests_total");
+//        errors = meterRegistry.counter("demo_errors");
+//    }
 
 
     @RabbitListener(queues = {QUEUE_NAME_RAW})

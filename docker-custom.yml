@@ -11,7 +11,7 @@ services:
     image: rabbitmq:3-management
     container_name: 'rabbitmq'
     ports:
-      - 5672:5672
+      - 6500:5672
       - 15672:15672
     volumes:
       - ./db:/var/lib/rabbitmq
@@ -23,7 +23,7 @@ services:
   controller:
     image: lightweight_service:0.0.1-SNAPSHOT
     ports:
-      - 8080:8080
+      - "8090:8080"
   service:
     image: heavy_service:0.0.1-SNAPSHOT
   
