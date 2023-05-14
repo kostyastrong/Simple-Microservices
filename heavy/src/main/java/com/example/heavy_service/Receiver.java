@@ -19,26 +19,31 @@ import static com.example.heavy_service.BrokerConfiguration.QUEUE_NAME_READY;
 
 @Service
 @Slf4j
-@NoArgsConstructor
-@AllArgsConstructor
 public class Receiver {
-//    private final Counter requests;
-//    private final Counter errors;
+    private final Counter requests;
+    private final Counter errors;
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-//    public Receiver(MeterRegistry meterRegistry) {
-//        requests = meterRegistry.counter("demo_requests_total");
-//        errors = meterRegistry.counter("demo_errors");
-//    }
+    public Receiver(MeterRegistry meterRegistry) {
+        requests = meterRegistry.counter("demo_requests_total");
+        errors = meterRegistry.counter("demo_errors");
+    }
 
 
     @RabbitListener(queues = {QUEUE_NAME_RAW})
-    public void receive(String text, MessageHeaders headers) throws InterruptedException {
-//        requests.increment();
+    public void receive(String text, MessageHeaders headers) {
+        requests.increment();
         log.info("Got new message: " + text + ", headers: " + headers.values());
         // some_analysis
-        Thread.sleep(new Random().nextInt() % 10000);
+        try {
+            int sleep = new Random().nextInt() % 10000;
+            sleep = Math.abs(sleep);
+            Thread.sleep(sleep);
+        } catch (Exception e) {
+            log.warn("error in heavy service when trying to sleep $e");
+            errors.increment();
+        }
         rabbitTemplate.convertAndSend(QUEUE_NAME_READY, text);
     }
 }
