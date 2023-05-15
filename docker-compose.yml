@@ -1,11 +1,6 @@
 version: "3.2"
 
 services:
-  # app:
-  #   queue: user.queue
-  #   exchange: user.exchange
-  #   routingkey: user.routingkey
-  #   message: Message has been sent Successfully..
   rabbitmq:
     image: rabbitmq:3-management
     container_name: 'rabbitmq'
@@ -14,10 +9,17 @@ services:
       - "15672:15672"
     volumes:
       - ./db:/var/lib/rabbitmq
-    environment:
-      - queue=spring-boot
-      - exchange=exchange
-      - routingkey=routingkey
-      - message=Message has been sent Successfully..
+  prometheus:
+    container_name: "prometheus"
+    image: prom/prometheus:v2.42.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    container_name: "grafana"
+    image: grafana/grafana:9.3.6
+    ports:
+      - "3000:3000"
     
   
